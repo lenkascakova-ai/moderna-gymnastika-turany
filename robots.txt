@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /ochrana-osobnych-udajov.html
+
+Sitemap: https://moderna-gymnastika-turany.vercel.app/sitemap.xml
