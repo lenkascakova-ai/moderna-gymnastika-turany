@@ -5,20 +5,28 @@
 // Postup nastavenia je v súbore `navod-formular-backend.md`.
 //
 // Po nastavení sem vlož URL nasadenej Google Apps Script webovej aplikácie:
-var WEBHOOK_URL = ""; // napr. "https://script.google.com/macros/s/AKfycb.../exec"
+var WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyZGi4gkT4Tuif2iMTEm8xMiU4Z8732kuXcz_lmhcc0EMDW6hF4-KhlOpfHUM6Npr1Y/exec";
 
 // ---------- Zápis modal (pop-up s termínmi) ----------
 (function () {
   var modal = document.getElementById("zapis-modal");
   if (!modal) return;
 
+  var closeBtn = modal.querySelector(".modal-close");
+  var lastFocused = null;
+
   function openModal() {
+    lastFocused = document.activeElement;
     modal.hidden = false;
     document.body.style.overflow = "hidden";
+    if (closeBtn) closeBtn.focus();
   }
   function closeModal() {
     modal.hidden = true;
     document.body.style.overflow = "";
+    if (lastFocused && typeof lastFocused.focus === "function") {
+      lastFocused.focus();
+    }
   }
 
   document.querySelectorAll("[data-open-zapis]").forEach(function (btn) {
@@ -31,7 +39,26 @@ var WEBHOOK_URL = ""; // napr. "https://script.google.com/macros/s/AKfycb.../exe
     if (e.target === modal) closeModal();
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && !modal.hidden) closeModal();
+    if (modal.hidden) return;
+    if (e.key === "Escape") {
+      closeModal();
+      return;
+    }
+    if (e.key === "Tab") {
+      var focusable = modal.querySelectorAll(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 
   // Automaticky raz za návštevu (session), s malým oneskorením
@@ -44,6 +71,13 @@ var WEBHOOK_URL = ""; // napr. "https://script.google.com/macros/s/AKfycb.../exe
     }
   } catch (err) {
     // localStorage/sessionStorage môže byť blokovaný — pop-up jednoducho preskočíme
+  }
+})();
+
+(function () {
+  var narodenieInput = document.getElementById("dieta-narodenie");
+  if (narodenieInput) {
+    narodenieInput.setAttribute("max", new Date().toISOString().split("T")[0]);
   }
 })();
 
@@ -69,7 +103,7 @@ var WEBHOOK_URL = ""; // napr. "https://script.google.com/macros/s/AKfycb.../exe
     var submitBtn = form.querySelector('button[type="submit"]');
 
     if (!WEBHOOK_URL) {
-      status.textContent = "✅ Náhľad: takto bude vyzerať potvrdenie po odoslaní. Reálne prepojenie sa doplní po nastavení Google Sheet (pozri navod-formular-backend.md).";
+      status.textContent = "⚠️ Formulár momentálne nie je napojený na odoslanie. Kontaktujte nás prosím telefonicky.";
       status.style.color = "var(--turquoise)";
       return;
     }
