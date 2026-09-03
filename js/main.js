@@ -5,7 +5,7 @@
 // Postup nastavenia je v súbore `navod-formular-backend.md`.
 //
 // Po nastavení sem vlož URL nasadenej Google Apps Script webovej aplikácie:
-var WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyZGi4gkT4Tuif2iMTEm8xMiU4Z8732kuXcz_lmhcc0EMDW6hF4-KhlOpfHUM6Npr1Y/exec";
+var WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxGwxP1H-VpcwLrTKLU1Z3fufVXZ0Mf7qNy-yvtmkZgmNKpRFpdLhGCaJ-EFibBPmp8/exec";
 
 // ---------- Zápis modal (pop-up s termínmi) ----------
 (function () {
