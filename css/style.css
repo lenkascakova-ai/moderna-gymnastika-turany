@@ -425,21 +425,6 @@ a { color: var(--raspberry-deep); }
   font-weight: 800;
 }
 
-/* ---------- Urgency banner ---------- */
-.urgency {
-  background: var(--ink);
-  color: #fff;
-  border-radius: 24px;
-  padding: 32px;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.urgency strong { color: var(--sun); }
-.urgency p { margin: 0; max-width: 46ch; color: #f2e9f1; }
-
 /* ---------- Gallery ---------- */
 .gallery-grid {
   display: grid;
